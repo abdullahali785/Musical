@@ -1,0 +1,21 @@
+{% extends "edit/base.jinja" %}
+{% block content %}
+
+<div class="m-5 py-5 text-center">
+    <h2 class="py-5">Pick a page to edit</h2>
+    <div class="btn-group" role="group" aria-label="Program Navigation">
+        <a href="/edit/{{id}}/general" class="btn btn-outline-dark btn-lg mx-2">General</a>
+        <a href="/edit/{{id}}/cast" class="btn btn-outline-dark btn-lg mx-2">Cast</a>
+        <a href="/edit/{{id}}/team" class="btn btn-outline-dark btn-lg mx-2">Crew</a>
+        <a href="/edit/{{id}}/songs" class="btn btn-outline-dark btn-lg mx-2">Songs</a>
+        <a href="/edit/{{id}}/thanks" class="btn btn-outline-dark btn-lg mx-2">Acknowledgements</a>
+    </div>
+</div>
+
+<form method="POST" action="/edit/{{id}}/general">
+    <div class="pb-5 text-center">
+        <button type="submit" name="delete_production" value="{{ id }}" class="p-3 btn btn-danger">Delete Production</button>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.jinja" %}
+{% block content %}
+
+<div class="program-section">
+    <h2 class="text-center">{{ production.title }}'s Cast</h2>
+    {% for role in roles %}
+        <p class="text-center">
+            <strong>{{ role.name }}</strong>: {{ role.students | map(attribute='name') | join(', ') }}
+        </p>
+    {% endfor %}
+</div>
+<div class="m-5 py-5 text-center">
+    <div class="btn-group" role="group" aria-label="Program Navigation">
+        <a href="/view/team" class="btn btn-outline-dark btn-lg mx-2">Crew</a>
+        <a href="/view/songs" class="btn btn-outline-dark btn-lg mx-2">Songs</a>
+        <a href="/view/thanks" class="btn btn-outline-dark btn-lg mx-2">Acknowledgements</a>
+    </div>
+</div>
+
+{% endblock %}

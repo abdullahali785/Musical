@@ -1,0 +1,53 @@
+{% extends "edit/base.jinja" %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="fw-bold">All Productions</h1>
+    <p class="text-muted">Select which production should be active for users to see.</p>
+</div>
+
+<form method="POST" action="">
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Active</th>
+                    <th>Title</th>
+                    <th>Subtitle</th>
+                    <th>Dates</th>
+                    <th>Location</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prod in productions %}
+                <tr>
+                    <td>
+                        <input type="radio" name="active_production" value="{{ prod.id }}" {% if prod.is_active %} checked {% endif %}>
+                    </td>
+                    <td>{{ prod.title }}</td>
+                    <td>{{ prod.subtitle }}</td>
+                    <td>
+                        {% if prod.start_date %}{{ prod.start_date.strftime('%d %B, %Y') }}{% endif %} -
+                        {% if prod.end_date %}{{ prod.end_date.strftime('%d %B, %Y') }}{% endif %}
+                    </td>
+                    <td>{{ prod.location }}</td>
+                    <td>
+                        <a href="/edit/{{ prod.id }}/aspects" class="btn btn-sm btn-primary">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <button class="btn btn-success btn-lg">Save Production</button>
+    </div>
+</form>
+
+<div class="mt-5">
+    <a href="/edit/new" class="btn btn-primary">Add New Production</a>
+</div>
+
+{% endblock %}

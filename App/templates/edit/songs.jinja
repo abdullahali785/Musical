@@ -1,0 +1,88 @@
+{% extends "edit/base.jinja" %}
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="fw-bold">Editing Songs</h1>
+</div>
+<form method="POST" action="">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white fw-semibold">Add New Song</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Song Title</label>
+                    <input type="text" class="form-control" name="new_song_title" placeholder="e.g., The World Above">
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Act</label>
+                    <input type="number" class="form-control" name="new_song_act">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Intermission Message</label>
+                    <input type="text" class="form-control" name="new_song_intermission_message" placeholder="Intermission message that will display after this song">
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Assign Roles</label>
+                    <select name="new_song_roles[]" class="form-select" multiple size="5">
+                        {% for role in roles %}
+                            <option value="{{ role.id }}">{{ role.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% for song in songs %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+            <strong class="fs-5">{{ song.title }}</strong>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3 row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Song Title</label>
+                    <input type="text" class="form-control" name="song_title_{{ song.id }}" value="{{ song.title }}">
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Act</label>
+                    <input type="number" class="form-control" name="song_act_{{ song.id }}" value="{{ song.act }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Intermission Message</label>
+                    <input type="text" class="form-control" name="song_msg_{{ song.id }}" value="{{ song.intermission_message }}">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Assigned Roles</label>
+                <select name="song_roles_{{ song.id }}[]" class="form-select" multiple size="6">
+                    {% for role in roles %}
+                        <option value="{{ role.id }}"
+                            {% if role in song.singers %} selected {% endif %}>
+                            {{ role.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple.</small>
+            </div>
+
+            <div class="text-end">
+                <button name="delete_song" value="{{ song.id }}" class="btn btn-danger btn-sm">Delete Song</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="my-4">
+        <button class="btn btn-primary btn-lg w-100 py-3 fw-semibold">Save Changes</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.jinja" %}
+{% block content %}
+
+<div class="program-section">
+    <h2 class="text-center">Song List</h2>
+    {% set acts = {} %}
+    {% for item in song_list %}
+        {% set act = item.song.act or 'No Act' %}
+        {% if act not in acts %}
+            {% set _ = acts.update({act: [item]}) %}
+        {% else %}
+            {% set _ = acts[act].append(item) %}
+        {% endif %}
+    {% endfor %}
+
+    {% for act, songs in acts|dictsort %}
+        <h3 class="text-center mt-4 mb-3">Act {{ act }}</h3>
+        {% for item in songs %}
+            <div class="text-center mb-2">
+                <p class="mb-1">
+                    <strong>{{ item.song.title }}</strong>
+                    {% if item.song.singers %}
+                        - 
+                        {% for singer in item.song.singers %}
+                            {{ singer.name }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </p>
+                {% if item.song.intermission_message %}
+                    <p class="text-primary fw-bold fs-5 mb-3">
+                        <em>{{ item.song.intermission_message }}</em>
+                    </p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+<div class="m-5 py-5 text-center">
+    <div class="btn-group" role="group" aria-label="Program Navigation">
+        <a href="/view/cast" class="btn btn-outline-dark btn-lg mx-2">Cast</a>
+        <a href="/view/team" class="btn btn-outline-dark btn-lg mx-2">Crew</a>
+        <a href="/view/thanks" class="btn btn-outline-dark btn-lg mx-2">Acknowledgements</a>
+    </div>
+</div>
+
+{% endblock %}

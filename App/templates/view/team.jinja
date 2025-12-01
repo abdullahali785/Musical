@@ -1,0 +1,26 @@
+{% extends "base.jinja" %}
+{% block content %}
+
+<div class="program-section">
+    <h2 class="py-3  text-center">Stage Crew</h2>
+    {% for student in crew %}
+        <p class="text-center">{{ student.name }}</p>
+    {% endfor %}
+</div>
+
+{# Creative Team #}
+<div class="program-section">
+    <h2 class="pt-5 pb-3 text-center">Creative Team</h2>
+    {% for member in team %}
+        <p class="text-center"><strong>{{ member.role.name }}</strong>: {{ member.adult.name }}</p>
+    {% endfor %}
+</div>
+<div class="m-5 py-5 text-center">
+    <div class="btn-group" role="group" aria-label="Program Navigation">
+        <a href="/view/cast" class="btn btn-outline-dark btn-lg mx-2">Cast</a>
+        <a href="/view/songs" class="btn btn-outline-dark btn-lg mx-2">Songs</a>
+        <a href="/view/thanks" class="btn btn-outline-dark btn-lg mx-2">Acknowledgements</a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.jinja" %}
+{% block content %}
+
+{# Title #}
+<div class="text-center mb-4">
+    <h4 class="text-muted">{{ production.subtitle }}</h4>
+    <h1>{{ production.title }}</h1>
+    <img src="{{ production.image }}" class="img-fluid" alt="{{ production.title }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/placeholder.jpg') }}';">
+</div>
+
+{# General #}
+<div class="program-section">
+    <h2 class="text-center">General Information</h2>
+    <p class="text-center">
+        <strong>Dates:</strong> 
+        {{ ordinal(production.start_date.day) }} {{ production.start_date.strftime('%B, %Y') }}
+        - 
+        {{ ordinal(production.end_date.day) }} {{ production.end_date.strftime('%B, %Y') }}
+    </p>
+    <p class="text-center"><strong>Location:</strong> {{ production.location }}</p>
+    <p class="text-center"><strong>Admission:</strong> {{ production.price }}</p>
+    <p class="text-center"><strong>Notes:</strong> {{ production.notes }}</p>
+</div>
+
+<div class="m-5 pb-5 text-center">
+    <div class="btn-group" role="group" aria-label="Program Navigation">
+        <a href="/view/cast" class="btn btn-outline-dark btn-lg mx-2">Cast</a>
+        <a href="/view/team" class="btn btn-outline-dark btn-lg mx-2">Crew</a>
+        <a href="/view/songs" class="btn btn-outline-dark btn-lg mx-2">Songs</a>
+        <a href="/view/thanks" class="btn btn-outline-dark btn-lg mx-2">Acknowledgements</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% macro ordinal(n) %}
+    {%- set n = n|string -%}
+    {%- if n.endswith('1') and not n.endswith('11') -%}{{ n }}st
+    {%- elif n.endswith('2') and not n.endswith('12') -%}{{ n }}nd
+    {%- elif n.endswith('3') and not n.endswith('13') -%}{{ n }}rd
+    {%- else -%}{{ n }}th
+    {%- endif -%}
+{% endmacro %}

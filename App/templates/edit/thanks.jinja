@@ -1,0 +1,31 @@
+{% extends "edit/base.jinja" %}
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="fw-bold">Editing Acknowledgements Section</h1>
+</div>
+
+<form method="POST" action="">
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white fw-semibold">
+            Production Acknowledgements
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Acknowledgements</label>
+                <textarea class="form-control" name="thanks_text" rows="6" placeholder="Write your acknowledgements here...">{{ production.thanks }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-4">
+        <button class="btn btn-primary btn-lg w-100 py-3 fw-semibold">
+            Save Changes
+        </button>
+    </div>
+
+</form>
+
+{% endblock %}

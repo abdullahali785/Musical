@@ -1,0 +1,56 @@
+{% extends "edit/base.jinja" %}
+{% block content %}
+<div class="">
+    <h1 class="pb-4">Editing General Section</h1>
+</div>
+<form method="POST" action="">
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" value="{{ production.title }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Subtitle</label>
+        <input type="text" name="subtitle" class="form-control" value="{{ production.subtitle }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Image URL</label>
+        <input type="text" name="image" class="form-control" value="{{ production.image }}">
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="start_date" class="form-control" value="{{ production.start_date.strftime('%Y-%m-%d') if production.start_date else '' }}">
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">End Date</label>
+            <input type="date" name="end_date" class="form-control" value="{{ production.end_date.strftime('%Y-%m-%d') if production.end_date else '' }}">
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" name="location" class="form-control" value="{{ production.location }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Admission Price</label>
+        <input type="text" name="price" class="form-control" value="{{ production.price }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Notes</label>
+        <textarea name="notes" class="form-control" rows="3">{{ production.notes }}</textarea>
+    </div>
+    <div class="pb-4 mb-3">
+        <label class="form-label">Acknowledgements</label>
+        <textarea name="thanks" class="form-control" rows="3">{{ production.thanks }}</textarea>
+    </div>
+    <div class="mb-4 form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_active" id="is_active"
+            {% if production.is_active %} checked {% endif %}>
+        <label class="form-check-label fw-semibold" for="is_active">Is Active</label>
+    </div>
+    <div class="pb-5">
+        <button class="p-3 btn btn-primary w-100 mb-2">Save Changes</button>
+    </div>
+</form>
+
+{% endblock %}
