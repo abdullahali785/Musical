@@ -24,6 +24,13 @@ def add():
     s = Song(title="The World Above", act=1, production_id=1)
     sa = SongAssignment(song_id=1, role_id=1)
 
+    c = Students.query.filter(id=10)
+    c.is_crew = True
+    c = Students.query.filter(id=20)
+    c.is_crew = True
+    c = Students.query.filter(id=30)
+    c.is_crew = True
+
     db.session.add_all([p, r, ra, a, cr, ca, s, sa])
     db.session.add_all([s, sa])
 
@@ -42,11 +49,13 @@ def delete():
 
 @view.get("/")
 def general():
-    # add()
-    # delete()
     production = Production.query.filter_by(is_active=True).first()
     if not production:
-        production = Production.query.first()
+        try:
+            production = Production.query.first()
+        except:
+            add()
+            production = Production.query.first()
 
     return render_template("view/general.jinja", production=production)
 
