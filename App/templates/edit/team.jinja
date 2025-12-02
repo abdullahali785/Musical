@@ -6,12 +6,28 @@
 </div>
 
 <form method="POST" action="">
-
-    <!-- ADD NEW ADULT -->
     <div class="card shadow-sm mb-4">
-        <div class="card-header bg-secondary text-white fw-semibold">
-            Add New Adult
+        <div class="card-header bg-secondary text-white fw-semibold">Assign Crew Members</div>
+        <div class="col-md-12 mb-3">
+            <div class="card-body">
+                <label class="form-label">Students</label>
+                <select class="form-select" name="new_crew_students[]" multiple size="6">
+                    {% for student in students %}
+                    <option value="{{ student.id }}" {% if student.is_crew %} selected {% endif %}>
+                        {{ student.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple.</small>
+            </div>
+            <div class="px-3 text-end">
+                <button class="btn btn-secondary w-25">Add Crew Members</button>
+            </div>
         </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white fw-semibold">Add New Adult</div>
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-8">
@@ -26,33 +42,9 @@
         </div>
     </div>
 
-    <!-- ADD NEW ROLE -->
     <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white fw-semibold">
-            Add New Creative Role / Position
-        </div>
-
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">Position Name</label>
-                    <input type="text" class="form-control" name="new_role_name" placeholder="e.g., Director">
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Assign Adults</label>
-                    <select name="new_role_adults[]" class="form-select" multiple size="5">
-                        {% for adult in adults %}
-                            <option value="{{ adult.id }}">{{ adult.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple.</small>
-                </div>
-            </div>
-        </div>
+        <div class="card-header bg-secondary text-white fw-semibold">Creative Team</div>
     </div>
-
-    <!-- EXISTING ROLES -->
     {% for role in roles %}
     <div class="card shadow-sm mb-4">
         <div class="card-header d-flex justify-content-between align-items-center bg-light">
@@ -60,16 +52,10 @@
         </div>
 
         <div class="card-body">
-
-            <!-- RENAME POSITION -->
             <div class="mb-3">
                 <label class="form-label">Rename Position</label>
-                <input type="text" class="form-control"
-                       name="role_name_{{ role.id }}"
-                       value="{{ role.name }}">
+                <input type="text" class="form-control" name="role_name_{{ role.id }}" value="{{ role.name }}">
             </div>
-
-            <!-- ASSIGN / REMOVE ADULTS -->
             <div class="mb-3">
                 <label class="form-label">Assigned Adults</label>
                 <select name="role_adults_{{ role.id }}[]" class="form-select" multiple size="6">
@@ -83,22 +69,14 @@
             </div>
 
             <div class="text-end">
-                <button name="delete_role"
-                        value="{{ role.id }}"
-                        class="btn btn-danger btn-sm">
-                    Delete Position
-                </button>
+                <button name="delete_role" value="{{ role.id }}" class="btn btn-danger btn-sm">Delete Position</button>
             </div>
-
         </div>
     </div>
     {% endfor %}
-
-    <!-- SAVE -->
+    
     <div class="my-4">
-        <button class="btn btn-primary btn-lg w-100 py-3 fw-semibold">
-            Save Changes
-        </button>
+        <button class="btn btn-primary btn-lg w-100 py-3 fw-semibold">Save Changes</button>
     </div>
 
 </form>

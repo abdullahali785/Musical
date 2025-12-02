@@ -30,6 +30,7 @@
                             <option value="{{ student.id }}">{{ student.name }}</option>
                         {% endfor %}
                     </select>
+                    <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple.</small>
                 </div>
             </div>
         </div>
@@ -52,8 +53,7 @@
             <label class="form-label">Assigned Students</label>
             <select name="role_students_{{ role.id }}[]" class="form-select" multiple size="6">
                 {% for student in students %}
-                    <option value="{{ student.id }}"
-                        {% if student in role.students %} selected {% endif %}>
+                    <option value="{{ student.id }}" {% if student in role.students %} selected {% endif %}>
                         {{ student.name }}
                     </option>
                 {% endfor %}

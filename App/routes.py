@@ -59,10 +59,6 @@ def cast():
 
 @view.get("/team")
 def team():
-    student = Students.query.get(15)
-    student.is_crew = True
-    db.session.commit()
-
     crew = Students.query.filter_by(is_crew=True).all()
     team = CreativeAssignment.query.all()
 
@@ -188,8 +184,8 @@ def save_cast(production_id):
         role.students = Students.query.filter(Students.id.in_(selected_ids)).all()
 
     new_role_students = request.form.getlist("new_role_students[]")
-    for sid in new_role_students:
-        assignment = RoleAssignment(role_id=new_role.id, student_id=int(sid))
+    for s_id in new_role_students:
+        assignment = RoleAssignment(role_id=new_role.id, student_id=int(s_id))
         db.session.add(assignment)
 
     db.session.commit()
@@ -198,14 +194,22 @@ def save_cast(production_id):
 
 @edit.get("/<int:production_id>/team")
 def edit_team(production_id):
+    students = Students.query.all()
     roles = CreativeRole.query.filter_by(production_id=production_id).all()
     adults = Adult.query.filter_by(production_id=production_id).all()
 
-    return render_template("edit/team.jinja", production_id=production_id, roles=roles, adults=adults)
+    return render_template("edit/team.jinja", production_id=production_id, students=students, roles=roles, adults=adults)
 
 @edit.post("/<int:production_id>/team")
 def save_team(production_id):
     roles = CreativeRole.query.filter_by(production_id=production_id).all()
+
+    new_crew_students = request.form.getlist("new_crew_students[]")
+    if new_crew_students:
+        crew_ids = set(map(int, new_crew_students))
+        for student in Students.query.all():
+            student.is_crew = True if student.id in crew_ids else False
+        db.session.commit()
 
     new_adult_name = request.form.get("new_adult_name")
     if new_adult_name:
