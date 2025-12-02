@@ -33,7 +33,7 @@ def create_app() -> Flask:
         db.init_app(this_app)
         if not db_path.exists():
             print("DB not found — creating...")
-            create_db()
+            create_db(this_app)
 
         this_app.register_blueprint(view, url_prefix="/view")
         this_app.register_blueprint(edit, url_prefix="/edit")

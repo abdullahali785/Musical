@@ -152,23 +152,21 @@ class SongAssignment(db.Model):
 
 # --- End ---
 
-def create_db(filename: str = "cast") -> None:
+def create_db(app):
     """Create database directly (no CLI needed)"""
-    from App import db
-    from App.models import Students
+    from . import Students
     import pathlib, csv
-    from flask import current_app
 
     # Determine DB path
-    db_file = current_app.config.get("SQLALCHEMY_DATABASE_URI").replace("sqlite:///", "")
+    db_file = app.config.get("SQLALCHEMY_DATABASE_URI").replace("sqlite:///", "")
     db_path = pathlib.Path(db_file)
-    
+
     # Delete existing DB
     if db_path.exists():
         db_path.unlink()
 
     # Build tables
-    engine = db.get_engine(current_app)
+    engine = db.get_engine(app)
     db.metadata.create_all(engine)
 
     # Add initial data from CSV
