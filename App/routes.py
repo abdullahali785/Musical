@@ -15,7 +15,7 @@ def add():
     p = Production(
         title="The Little Mermaid",
         subtitle="Disney's Production",
-        image="https://cdn12.picryl.com/photo/2016/12/31/music-melody-musical-note-music-d14ce0-1024.jpg",
+        image="https://upload.wikimedia.org/wikipedia/en/c/c0/The_Little_Mermaid_%28Official_1989_Film_Poster%29.png",
         start_date=datetime(2025, 12, 10),
         end_date=datetime(2025, 12, 12),
         location="CFL Building, Luther College, Decorah, Iowa",
