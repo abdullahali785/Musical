@@ -12,27 +12,47 @@ from App.models import Production, Students, Role, RoleAssignment, CreativeRole,
 
 # --- Add Rows ---
 def add():
-    p = Production(title="The Little Mermaid", subtitle="Disney's Production", image="https://cdn12.picryl.com/photo/2016/12/31/music-melody-musical-note-music-d14ce0-1024.jpg", start_date=datetime(2025, 12, 10), end_date=datetime(2025, 12, 12) , location="CFL Building, Luther College, Decorah, Iowa", price=10.0, notes ="Photography and Videography are strictly prohibited!", thanks="Thank You for your time! We hope you liked our musical.", is_active=True)
+    p = Production(
+        title="The Little Mermaid",
+        subtitle="Disney's Production",
+        image="https://cdn12.picryl.com/photo/2016/12/31/music-melody-musical-note-music-d14ce0-1024.jpg",
+        start_date=datetime(2025, 12, 10),
+        end_date=datetime(2025, 12, 12),
+        location="CFL Building, Luther College, Decorah, Iowa",
+        price=10.0,
+        notes="Photography and Videography are strictly prohibited!",
+        thanks="Thank You for your time! We hope you liked our musical.",
+        is_active=True
+    )
+    db.session.add(p)
+    db.session.commit()
 
-    r = Role(name="Ariel", production_id=1)
-    ra = RoleAssignment(role_id=1, student_id=1)
+    r = Role(name="Ariel", production_id=p.id)
+    db.session.add(r)
+    db.session.commit()
 
-    a = Adult(name="Abdullah", production_id=1)
-    cr = CreativeRole(name="Technology Lead", production_id=1)
-    ca = CreativeAssignment(role_id=1, adult_id=1)
+    ra = RoleAssignment(role_id=r.id, student_id=1)
+    db.session.add(ra)
 
-    s = Song(title="The World Above", act=1, production_id=1)
-    sa = SongAssignment(song_id=1, role_id=1)
+    a = Adult(name="Abdullah", production_id=p.id)
+    cr = CreativeRole(name="Technology Lead", production_id=p.id)
+    db.session.add_all([a, cr])
+    db.session.commit()
 
-    c = Students.query.filter(id=10)
-    c.is_crew = True
-    c = Students.query.filter(id=20)
-    c.is_crew = True
-    c = Students.query.filter(id=30)
-    c.is_crew = True
+    ca = CreativeAssignment(role_id=cr.id, adult_id=a.id)
+    db.session.add(ca)
 
-    db.session.add_all([p, r, ra, a, cr, ca, s, sa])
-    db.session.add_all([s, sa])
+    s = Song(title="The World Above", act=1, production_id=p.id)
+    db.session.add(s)
+    db.session.commit()
+
+    sa = SongAssignment(song_id=s.id, role_id=r.id)
+    db.session.add(sa)
+
+    for student_id in [10, 20, 30]:
+        student = Students.query.filter_by(id=student_id).first()
+        if student:
+            student.is_crew = True
 
     db.session.commit()
 
@@ -51,11 +71,8 @@ def delete():
 def general():
     production = Production.query.filter_by(is_active=True).first()
     if not production:
-        try:
-            production = Production.query.first()
-        except:
-            add()
-            production = Production.query.first()
+        add()
+        production = Production.query.first()
 
     return render_template("view/general.jinja", production=production)
 
