@@ -56,48 +56,41 @@ def add():
 
     db.session.commit()
 
-# --- Delete Rows ---
-def delete():
-    db.session.query(Production).filter(Production.id != 1).delete(synchronize_session=False)
-    # db.session.query(SongAssignment).delete()
-    # db.session.query(CreativeAssignment).filter(CreativeAssignment.role_id == 1).delete(synchronize_session=False)
-    
-    db.session.commit()
-
 
 # --- View Routes ---
 
 @view.get("/")
 def general():
+    # add()
+    # delete()
     production = Production.query.filter_by(is_active=True).first()
     if not production:
-        add()
         production = Production.query.first()
 
     return render_template("view/general.jinja", production=production)
 
-@view.get("/cast")
-def cast():
-    production = Production.query.get(1)
+@view.get("/<int:production_id>/cast")
+def cast(production_id):
+    production = Production.query.get(production_id)
     roles = Role.query.filter_by(production_id=production.id).all()
 
     return render_template("view/cast.jinja", roles=roles, production=production)
 
-@view.get("/team")
-def team():
+@view.get("/<int:production_id>/team")
+def team(production_id):
     crew = Students.query.filter_by(is_crew=True).all()
     team = CreativeAssignment.query.all()
 
     return render_template("view/team.jinja", crew=crew, team=team)
 
-@view.get("/songs")
-def songs():
+@view.get("/<int:production_id>/songs")
+def songs(production_id):
     song_list = SongAssignment.query.all()
     return render_template("view/songs.jinja", song_list=song_list)
     
-@view.get("/thanks")
-def thanks():
-    production = Production.query.get(1)
+@view.get("/<int:production_id>/thanks")
+def thanks(production_id):
+    production = Production.query.get(production_id)
     return render_template("view/thanks.jinja", production=production)
 
 
