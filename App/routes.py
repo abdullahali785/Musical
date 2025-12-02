@@ -61,10 +61,9 @@ def add():
 
 @view.get("/")
 def general():
-    # add()
-    # delete()
     production = Production.query.filter_by(is_active=True).first()
     if not production:
+        add()
         production = Production.query.first()
 
     return render_template("view/general.jinja", production=production)
