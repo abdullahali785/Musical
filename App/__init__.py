@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Musical initialization """
 
-import os, pathlib, dotenv
+import os, pathlib, dotenv, subprocess
 from flask import Flask, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -30,6 +30,9 @@ def create_app() -> Flask:
         this_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
         db.init_app(this_app)
+        if not db_path.exists():
+            print("DB not found — creating...")
+            subprocess.run(["python", "App/models.py", "cast", "create"], check=True)
 
         this_app.register_blueprint(view, url_prefix="/view")
         this_app.register_blueprint(edit, url_prefix="/edit")
