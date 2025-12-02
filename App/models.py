@@ -154,7 +154,6 @@ class SongAssignment(db.Model):
 
 def create_db(app):
     """Create database directly (no CLI needed)"""
-    from . import Students
     import pathlib, csv
 
     db_file = app.config.get("SQLALCHEMY_DATABASE_URI").replace("sqlite:///", "")
