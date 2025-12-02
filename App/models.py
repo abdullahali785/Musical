@@ -154,9 +154,9 @@ class SongAssignment(db.Model):
 
 def create_db(app):
     """Create database directly (no CLI needed)"""
+    from . import Students
     import pathlib, csv
 
-    # Determine DB path
     db_file = app.config.get("SQLALCHEMY_DATABASE_URI").replace("sqlite:///", "")
     db_path = pathlib.Path(db_file)
 
@@ -164,14 +164,13 @@ def create_db(app):
     if db_path.exists():
         db_path.unlink()
 
-    # Build tables
-    engine = db.get_engine(app)
-    db.metadata.create_all(engine)
+    # Wrap DB creation and session in app context
+    with app.app_context():
+        # Build tables
+        db.create_all()
 
-    # Add initial data from CSV
-    session_factory = db.create_scoped_session()
-    session = session_factory()
-    try:
+        # Add initial data from CSV
+        session = db.session
         this_dir = pathlib.Path(__file__).parent
         data_file = this_dir.parent / "Data" / "cast.csv"
         with open(data_file, "r", encoding="utf8") as f:
@@ -184,8 +183,6 @@ def create_db(app):
                 )
                 session.add(student)
             session.commit()
-    finally:
-        session.close()
 
     print("Database created successfully.")
 
