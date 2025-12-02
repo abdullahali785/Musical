@@ -152,6 +152,46 @@ class SongAssignment(db.Model):
 
 # --- End ---
 
+def create_db(filename: str = "cast") -> None:
+    """Create database directly (no CLI needed)"""
+    from App import db
+    from App.models import Students
+    import pathlib, csv
+    from flask import current_app
+
+    # Determine DB path
+    db_file = current_app.config.get("SQLALCHEMY_DATABASE_URI").replace("sqlite:///", "")
+    db_path = pathlib.Path(db_file)
+    
+    # Delete existing DB
+    if db_path.exists():
+        db_path.unlink()
+
+    # Build tables
+    engine = db.get_engine(current_app)
+    db.metadata.create_all(engine)
+
+    # Add initial data from CSV
+    session_factory = db.create_scoped_session()
+    session = session_factory()
+    try:
+        this_dir = pathlib.Path(__file__).parent
+        data_file = this_dir.parent / "Data" / "cast.csv"
+        with open(data_file, "r", encoding="utf8") as f:
+            content = csv.DictReader(f)
+            for item in content:
+                student = Students(
+                    name=item["name"],
+                    sex=item["sex"],
+                    year=item["year"]
+                )
+                session.add(student)
+            session.commit()
+    finally:
+        session.close()
+
+    print("Database created successfully.")
+
 
 @click.command(help="Create a database from the CSV file")
 @click.pass_context

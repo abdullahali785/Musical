@@ -9,6 +9,7 @@ db = SQLAlchemy()
 
 def create_app() -> Flask:
     from App.routes import view, edit
+    from App.models import create_db
 
     this_app = Flask(__name__)
     this_dir = pathlib.Path(__file__).parent
@@ -32,7 +33,7 @@ def create_app() -> Flask:
         db.init_app(this_app)
         if not db_path.exists():
             print("DB not found — creating...")
-            subprocess.run(["python", "App/models.py", "cast", "create"], check=True)
+            create_db()
 
         this_app.register_blueprint(view, url_prefix="/view")
         this_app.register_blueprint(edit, url_prefix="/edit")
